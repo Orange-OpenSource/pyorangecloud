@@ -1,0 +1,313 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
+<head>
+<title>PyOrangeCloud python module - Documentation</title>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta http-equiv="Cache-Control" content="no-cache" />
+<meta name="version" content="1.0.3" />
+<meta name="date" content="2014-09-17" />
+<style type="text/css">
+body { font-family: Arial, sans-serif; font-size: 10pt; margin: 5px auto; width: 80%; min-width: 200px; max-width: 800px;
+/*	background-image: url("http://docbook.sourceforge.net/release/images/draft.png");
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-attachment: fixed;
+*/
+}
+
+h1 { font-size: 24pt; border-bottom: 1px solid #888888;
+	padding-top: 16px; 
+}
+
+h2 { font-size: 16pt; margin-top: 60px; border: 1px dotted #aaaaaa; background-color: rgba(255, 140, 40, 0.7); padding: 2px 5px ; }
+h2.endpoint { font-family: "Courier New", monospace; }
+h3 { font-size: 13pt; border-bottom: 1px dotted #666666; }
+h4 { font-size: 11pt; }
+h5 { margin-bottom: 0; font-size: 10pt; }
+p  {margin-top: 0; }
+
+div#footer { margin-top: 50px; margin-bottom: 10px; border-top: 1px solid #aaaaaa; display: block; }
+
+a { color: #ff6600; text-decoration: none; }
+a:hover { background-color: #ff6600; color: white; }
+
+table { border-collapse: collapse; }
+tr { border-top: 1px solid #e0e0e0; }
+td,th { vertical-align: top; padding: 1px 10px 20px 0; }
+th { background-color: #dddddd; text-align: left; }
+
+table.params { width: 90%; margin: auto; }
+table.params tr > td:first-child			{ font-weight: bold; width: 150px; }	/* param name col */
+table.params td.required:after				{ content: "\A required"; white-space: pre; font-weight: normal; font-style: italic; color: #444444; }	/* usage */
+table.params tr > td:first-child + td + td	{ font-style: italic; color: #888888; width: 100px; padding-left: 15px; }	/* param type */
+
+code  { font-family: "Courier New", monospace; }
+code.block { display: block; white-space: pre-wrap; word-wrap: break-word; border: 1px dotted black; padding: 0 3px; background-color: rgba(255, 255, 240, 0.7); margin-top: 7px; }
+code.block em { color: #888888; }
+
+li { padding-bottom: 4px; }
+em > em { font-weight: bold; font-style: normal; }
+
+div.default:before  { content: "Default: "; color: #000000; font-family: "Arial", sans-serif; }
+div.default  { display: block; font-family: "Courier New", monospace; color: #444444; padding-top: 5px; }
+
+p.note { font-size: 9pt; }
+
+ul.apilist { list-style-type: none; border-width: 1px 0 1px 0; border-style: dotted; padding: 5px 0 5px 30px; }
+ul.apilist li:before { content: ""; border-color: transparent #ff6600; border-style: solid;
+    border-width: 0.35em 0 0.35em 0.45em; display: block; height: 0; width: 0; left: -1em; top: 0.9em; position: relative; }
+
+div#history { margin-top: 60px; font-size: smaller; border-left: 1px solid #444; padding-left: 10px; }
+div#history table { margin-top: 10px; }
+div#history table th { padding: 0 10px 0 10px; }
+
+</style>
+<script>
+function showDocVersion() { 
+	var metas = document.getElementsByTagName('meta');
+
+	for (i=0; i<metas.length; i++)
+	{
+		if (metas[i].getAttribute("name") == "version")
+		{
+			document.write("v" + metas[i].getAttribute("content"));
+		}
+	}
+}
+
+function showDocDate() { 
+	var metas = document.getElementsByTagName('meta');
+
+	for (i=0; i<metas.length; i++)
+	{
+		if (metas[i].getAttribute("name") == "date")
+		{
+			document.write(metas[i].getAttribute("content"));
+		}
+	}
+}
+
+</script>
+
+</head>
+
+<body>
+
+<p style="font-size:x-large;text-align:center">PyOrangeCloud Documentation</p>
+
+<p>
+<ul class="xapilist">
+	<li><a href="#introduction">Introduction</a></li>
+	<li><a href="#download">Download, Install & Test</a></li>
+	<li><a href="#quickstart">Quick Start</a></li>
+	<li><a href="#reference">Reference</a></li>
+</ul>
+</p>
+
+
+<h1 id="introduction"><em>Introduction</em></h1>
+<p>
+PyOrangeCloud is a python binding (client library) of the Orange Cloud API. The Cloud API allows programmatically to access user data (folders, files) stored on the Orange Cloud.
+The pyorangecloud python module gives straighforward access to all operations of the API, hiding complexity of token and session management.
+<br/>In addition to the basic operations provided by the Orange Cloud API it gives some additional facilities like recursive folder traversal and resolution of files identifiers as hierarchical file paths.
+</p>
+
+<p>For all the details of the data structures returned by the API, the full Cloud API reference is available <a href="http://doc-api.orangeadd.com/cloud/v1/cloud.html">here</a> and a getting started manual is available <a href="http://doc-api.orangeadd.com/gettingstarted/cloud.html">here</a>.
+</p>
+<p><b>Some fundamental design rules of the python binding to the Cloud API</b>
+<ul>
+<li>When an API operation returns a JSON structure with more than one field the equivalent operation returns the same equivalent structure (a python dictionary). However if an API operation returns a unique field the equivalent python operation will directly return the value of that field.</li>
+<li>Access tokens and session ids are automatically retrieved taken into account the information passed in the constructor. If a session expires a new session id is retrieved, as far as the token remains valid. By default token information is made persistent.</li>
+<li>When something gets wrong in the API, an exception will be raised (PyCloudOrangeError exception or any relevant subclass error). The original API error and message are included in the error information.</li>
+<li>All operations dealing with a file or a folder uses two ways to reference files and folders: using the fileId or folderId as exposed by the API, or using the hierarchical displayable path (foldername/.../subfoldername/filename). The character '@' is used as prefix to characterize use of paths. Indeed using an id rather than a path will be fast since it will not require any path resolution.</li>
+</ul>
+</p>
+
+<h1  id="download"><em>Download, Install & Test</em></h1>
+
+<p>Just download the zip file from this repository. It contains the module itself pyorangecloud.py as
+well as command line utility pyorangecloud_launcher.py and a sample program pyorangecloud_test.py.
+<br/>To install, go to directory and execute setup.py. This will copy pyorangecloud.py to your python site so that it is permanently available.
+Since it is a simple python module you also copy to your work directory and use without installation.
+<p/>
+<p>The pyorangecloud module depends on the <b>requests</b> module to perform http requests. Request is an open source delivered under Apache License 2.0 (same than the license of this module).
+To download and install the request module go to: <a href="http://docs.python-requests.org">Requests Documentation</a>.
+</p>
+
+<p><b>License</b></p>
+<p>Copyright 2014 Orange</p>
+<p>Licensed under the Apache License, Version 2.0 (the “License”); you may not use this file except in compliance with the License. You may obtain a copy of the License at
+<a href="http://www.apache.org/licenses/LICENSE-2.0">http://www.apache.org/licenses/LICENSE-2.0</a></p>
+<p>Unless required by applicable law or agreed to in writing, software distributed under the License is distributed on an “AS IS” BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the specific language governing permissions and limitations under the License.
+</p>
+
+
+<p><b>Quick Testing in command line </b></p>
+<p>Open the pyorangecloud_launcher.py in your favorite editor, and edit the configuration variables CLIENT_ID, CLIENT_SECRET, REDIRECT_URI,
+and if needed edit PROXIES, TOKEN_STORAGE_DEFAULT and PATHS_STORAGE_DEFAULT.
+<br/>Ensure you have just obtained a fresh authorization code from a user (see url in <a href="#userconsent">Obtaining User Consent</a>).
+<br/><br/>Then launch: 
+<br/><tt>python pyorangecloud_launcher.py -c {userAuthCode} freeservice</tt><br/>&nbsp;&nbsp;&nbsp;&nbsp;This will display user free space.
+<br/><tt>python pyorangecloud_launcher.py -c {userAuthCode} listFolder</tt><br/>&nbsp;&nbsp;&nbsp;&nbsp;This will display user root directory
+<br/>Pass -d H to get http traces, pass -h to get the list of all commands
+<br/><br/>You may also want to execute the example program <tt>pyorangecloud_test.py</tt> which illustrates upload of a file. Edit the configuration
+variables (same way than pyorangecloud_launcher.py) and then execute it: <tt>python pyorangecloud_test.py</tt>
+<br/>The AUTH_CODE may be left blank if your last command was done before one hour (since token validity is one hour)
+</p>
+
+
+
+<h1 id="quickstart"><em>Quick Start</em></h1>
+
+<ul class="xapilist">
+	<li><a href="#gettingspace">Getting available space</a></li>
+	<li><a href="#browsingfiles">Listing folder contents</a></li>
+	<li><a href="#fileinfo">Get detailed file information</a></li>
+	<li><a href="#creatingfolder">Creating a folder</a></li>
+	<li><a href="#uploadingfile">Uploading a file</a></li>
+	<li><a href="#deletingfile">Deleting file</a></li>
+	<li><a href="#deletingfolder">Deleting folder</a></li>
+</ul>
+</p>
+
+<h2 id="apikeys">Obtaining API keys</h2>
+<p>In order to be able to make calls to the Orange Cloud API using the PyOrangeCloud, you need credentials for your application: they are used by the backend platform to identify your application and thus to allow it to make calls to the Cloud API. You get these credentials when you register your application on the <a href="http://www.orangepartner.com/">Orange Partner Portal</a>.
+</p>
+<p>At the end of this registration process, you will be provided with:
+<ul>
+	<li>a client identifier: a unique ID provided by the Orange backend server to identify your application</li>
+	<li>a client secret: it is used to sign/crypt the requests and must be shared by the client and server</li>
+	<li>a redirect url: this is an url you provide. It will be used later on, during the user authentication process. It has to be known by the server for security reasons.</li>
+</ul>
+
+<p>These three pieces of information will need to be passed to the constructor of the OrangeCloudClient class.
+
+
+<h2 id="userconsent">Obtaining user consent</h2>
+
+<p>To access the user file hierarchy you will need to obtain from him his consent.
+The procedure to obtain an authentification code follows OAuth 2.0 standard (see <a href="http://nat.sakimura.org/2012/01/20/openid-connect-nutshell/">oauth tutorial</a> for details).
+</p>
+<p>The URL for obtaining user consent is as follows:
+<br/><tt>https://api.orange.com/oauth/v2/authorize?prompt=login%20consent&state=orangecloud&redirect_uri=[http:/your/redirect/uri]&response_type=code&client_id=[yourclientid]&scope=openid%20cloud</tt>.
+<br/>Note: The operation getAuthorizeUrl returns this URL using the provided application information.
+</p>
+<p>The authentification code need to be passed to the constructor of the OrangeCloudClient class. The python code will automatically use this code to obtain a valid token and a valid
+session, and when necessary, refresh the session. Token information is made persistent so that the user consent can be used along the duration of token validity (generally one hour). 
+The authentification code itself is in fact only used once.
+</p>
+
+<p><em>WARNING</em>: Before providing its consent, the user is expected to have accepted the terms and condition of Orange Cloud Service. Otherwise session retrieval will fail with CGU_NOT_ACCEPTED error.
+Invitation to accept CGU is provided each time the user access its cloud home page.
+
+<h2 id="Instantiating OrangeCloud client">OrangeCloudClient constructor</h2>
+
+<p>To start operating with the library you need to import the module and instantiate the class OrangeCloudClient passing application keys and authentification code:
+<code class="block"><b>from</b> pyorangecloud <b>import</b> OrangeCloudClient
+
+app = {'clientId':'xxx','clientSecret':'yyyyy','redirectUri':'http://my:redirect/uri'}
+client = <span style="color:red">OrangeCloudClient</span>(app,authCode='xxx')
+</code>
+</p>
+<p>The client is ready for usage. Additional parameters may be passed to the constructor.
+<br/>If you want to track exchanged http data, pass debugFlags='H'. Pass debugFlags='C' for debug specific to this module, or path both for full debug (debugFlags='HC')
+<br/>If you want provide you own directory path for storing tokens, pass tokenStorage='/my/dir'
+<br/>If you want to bypass support of token persistence, pass tokenStorage=None (default value is CURRDIR to mean that current directory is used).
+<br/>If you want provide you own directory for store a cache of folder paths, pass pathsStorage='/my/dir'
+<br/>If you want to bypass folder path caching, pass pathsStorage=None or pathsStorage="none" (default value is CURRDIR to mean that current directory is used).
+</p>
+<p>The currently used token and the active session id (ssid) may be obtained by calling <em>getAccessToken()</em> and <em>getSessionId()</em>.
+However, calling these two functions is generally not needed unless the code wants to manage token persistence storage by its own.   
+
+<h2 id="gettingspace">Getting available space</h2>
+
+<p>To get the remaining space available for storage, call the freespace operation :
+<code class="block">print("My available space is: %s" % client.<span style="color:red">freespace</span>())
+</code>
+</p>
+<p>The call returns a long integer (number of bytes):
+<code class="block">My available space is: 53597116521</code>
+</p>
+
+<h2 id="browsingfiles">Listing your folders</h2>
+
+<p>To list your folder contents, simply call listFolder
+passing the folderId or no parameters (default root directory assumed in that case).
+<br/>Here is an example of code displaying subfolder and file names with their file type.
+
+<code class="block">print("Default folder listing ...")
+folderInfo = client.<span style="color:red">listFolder</span>() 
+<b>for</b> f <b>in</b> folderInfo['subfolders']+folderInfo['files']:
+    print (f['name'] + ' ' + f.get('type',''))
+</code>
+</p>
+
+<p>Alternatively you may use recursive versions to list folders and files. The operation listAllFolders
+list all folders and subfolders - recursively - of a given folder and the operation listAllFiles
+list folders and files. The 'displayable' file path is included in the response.
+<code class="block">client.listAllFiles()
+</code>
+</p>
+
+<p><b>Warning</b>: Your application may have restricted rights when accessing user folders and files.
+In this case the default directory is not the root directory but the one specific to the application. 
+</p>
+
+<h2 id="fileinfo">Retrieving file details</h2>
+<p>Once you have a list of files, you can get more information about a particular file calling getFileInfo.
+<br/>The example below is similar to the previous one except that more information is displayed on files.
+<code class="block">print("Default folder listing ...")
+folderInfo = client.<span style="color:red">listFolder()</span>
+<b>for</b> d <b>in</b> folderInfo['subfolders']:
+    print (d['name'])
+files = folderInfo['files']
+<b>for</b> f <b>in</b> files:
+    details = client.<span style="color:red">getFileInfo</span>(f['id'])
+    print ("%(name)s: type:%(type)s size:%(size)s date:%(creationDate)s" % details)
+</code>
+</p>
+
+<h2 id="download">Downloading a file</h2>
+
+<p>To download a file, simply call download operation, passing either the fileId or the download url of the file (obtained as part of the result of getFileInfo)
+in addition of passing the target directory or taget file path.
+<code class="block">client.<span style="color:red">downloadFile</span>(fileId,"/my/target/directory-or-file")</code>
+</p>
+
+
+<h2 id="creatingfolder">Creating a folder</h2>
+<p>In order to create a new directory, call <em>createFolder</em> with its name and the parent folder id.  It returns the new folder info.
+<code class="block">folderInfo = client.<span style="color:red">createFolder</span>("myfoldername",myFolderId)</code>
+</p>
+
+<p>If the request succeeded, you should receive the python disctionary that contains the result of a folder listing of the newly created directory:
+</p>
+
+<h2 id="uploadingfile">Uploading a file</h2>
+<p>Uploading a file is straightforward and simply requires the name of the file and the file path. If the mimetype cannot be derived from the file extension you should also pass the mimetype. As a variant of operation call you may pass directly a content (text or binary data) in place of the file path. To distinguish from both cases when passing a file path you should prefix with '@' character.
+<br/>Below a example of two uploads:</p>
+
+<code class="block">fileId1 = client.<span style="color:red">uploadFile</span></a>("test.txt",folderInfo['id'],"This is my content...","text/plain")
+fileId2 = client.<span style="color:red">uploadFile</span></a>("mypicture.jpg",folderInfo['id'],"@/my/file/location/mypicture.jpg")
+</code>
+</p>
+
+<h2 id="deletingfile">Deleting a file</h2>
+<p>To delete a file, call the deleteFile operation with an fileId or a file path prefixed by '@'.
+<br/>Below an example:
+<code class="block">client.<span style="color:red">deleteFile</a>(<em>fileId</em>)</code>
+
+<h2 id="deletingfolder">Deleting a folder</h2>
+<p>To delete a folder, call the deleteFolder operation with an folderId or a folder path prefixed by '@'.
+<br/>Below an example:
+<code class="block">client.<span style="color:red">deleteFolder</span>(<em>folderId</em>)</code>
+<p><b>Warning</b>: all files and subfolders contained inside the folder to be deleted will be deleted as well.
+</p>
+
+<h1 id="reference"><em>Reference</em></h1>
+
+<img src="OrangeCloudClientInterface.png"/>
+
+<div id="footer">&copy; Orange 2014 - <script>showDocVersion()</script> - <script>showDocDate()</script></div>
+</body>
+</html>
