@@ -24,9 +24,9 @@ Ensure you have a user account on Orange Cloud and that as a user you have accep
 Ensure you have just obtained a fresh authorization code from a user 
 
 Then launch:
-python pyorangecloud_launcher.py -c {userAuthCode} freeservice
+* python pyorangecloud_launcher.py -c {userAuthCode} freeservice
     This will display user free space.
-python pyorangecloud_launcher.py -c {userAuthCode} listFolder
+* python pyorangecloud_launcher.py -c {userAuthCode} listFolder
     This will display user root directory
 Pass -d H to get http traces, pass -h to get the list of all commands
 
