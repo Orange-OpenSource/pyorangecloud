@@ -27,7 +27,7 @@ AUTH_CODE = '' ## Provide the user auth code
 ## Instantiates the client. 
 ## To see http traces, pass debugFlags='H', for other traces: debugFlags='C', for both: debugFlags='HC'
 ## To change default location of token persistence, pass tokenStorage='/my/token/storage/location'
-app = {'clientId': CLIENT_ID, 'clientSecret': CLIENT_SECRET, 'redirectUri' : REDIRECT_URL}
+app = {'clientId': CLIENT_ID, 'clientSecret': CLIENT_SECRET, 'redirectUri' : REDIRECT_URI}
 client = OrangeCloudClient(app,authCode=AUTH_CODE,proxies=PROXIES,debugFlags=DEBUG_FLAGS)
 
 ## Calls and displays freespace
