@@ -36,7 +36,7 @@ Pass -d H to get http traces, pass -h to get the list of all commands
 
 # USAGE DOCUMENTATION 
 
-See the included html file pyorangecloud_doc.html or visit doc provided online.
+See the included html file pyorangecloud_doc.html or visit the doc provided online in the wiki page.
 
 # LICENSE
 The sofware is licensed under Apache-2.0 terms.
