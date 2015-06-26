@@ -278,6 +278,7 @@ class OrangeCloudRawClient:
         bindata.extend('\r\n')
         #self.debug("bindata", bindata + "..." + '--UploadBoundary--\r\n')
         bindata.extend(content)
+        bindata.extend('\r\n') ## fix 26/06/2015
         bindata.extend('--UploadBoundary--')
         if DEBUG_DUMP_UPLOAD: ## for DEBUG
             fcontentpath = os.path.join(os.getcwd(),"upload_file_content.dump")
