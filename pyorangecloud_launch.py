@@ -144,7 +144,7 @@ def main(args):
         arglist = args.arglist
         if args.opname in service_operations: arglist.append(args.accessToken);arglist.append(args.sessionId)
     op = getattr(client,args.opname,None)
-    if not op: raise PyOrangeCloudError("UnknownOperation",args.opname)
+    if not op: raise pyorangecloud.PyOrangeCloudError("UnknownOperation",args.opname)
     res = op(*arglist)
     import pprint
     pprint.pprint(res)
